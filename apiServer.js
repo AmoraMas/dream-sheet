@@ -6,13 +6,10 @@ const port = process.env.PORT || 8000;  // Port that Express listens to for requ
 
 app.use(cors());
 
-const { Pool } = require("pg");
 app.use(express.json());
 
-// define port number
-
 // define structure for accessing database
-const { Pool } = require('pg');
+//const { Pool } = require('pg');
 const dbConn = require('./dbConn');
 const pool = dbConn.getPool();
 
