@@ -20,7 +20,7 @@ function runMigrations(pool, callback){
             country VARCHAR(25),
             state VARCHAR(25),
             city VARCHAR(25),
-            lat-long POINT,
+            lat_long POINT,
             notes TEXT)`,
             (err, data) => {
                 if (err){
@@ -96,7 +96,7 @@ function runMigrations(pool, callback){
             id SERIAL PRIMARY KEY NOT NULL,
             name VARCHAR(50) NOT NULL,
             location_id INTEGER NOT NULL REFERENCES location,
-            lat-long point,
+            lat_long point,
             climate_id INTEGER REFERENCES climate,
             population_id INTEGER REFERENCES population,
             type_id INTEGER REFERENCES type,
@@ -132,8 +132,8 @@ function runMigrations(pool, callback){
         pool.query(`CREATE TABLE IF NOT EXISTS visits (
             id SERIAL PRIMARY KEY NOT NULL,
             dream_id INTEGER NOT NULL REFERENCES dreams,
-            date-visited DATE,
-            length-visited VARCHAR(10),
+            date_visited DATE,
+            length_visited VARCHAR(10),
             rating DECIMAL(2,1),
             notes TEXT)`,
             (err, data) => {
