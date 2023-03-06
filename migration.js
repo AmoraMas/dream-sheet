@@ -149,6 +149,6 @@ function runMigrations(pool, callback){
 
 runMigrations(pool, () => {
     // migrations are complete, we can close the pools
-    done();
     pool.end();
+    return done();
 })
