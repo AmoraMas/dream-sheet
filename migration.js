@@ -6,7 +6,7 @@ const pool = dbConn.getPool();
 // establish a connection we can close with a callback
 function runMigrations1(pool, callback){
     // connect to DB
-    pool1.connect((err, client, done) => {
+    pool.connect((err, client, done) => {
         if (err) {
             console.log("Failed to connect to the database");
             console.error(err);
