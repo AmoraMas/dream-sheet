@@ -167,7 +167,7 @@ function runSeeder(pool, callback){
 
         pool.query(`SELECT COUNT(*) FROM visits`, (err, data) => {
             if (data.rows[0].count == 0) {
-                pool.query(`INSERT INTO visits (dreams_id, date_visited, length_visited, rating, notes) VALUES 
+                pool.query(`INSERT INTO visits (dream_id, date_visited, length_visited, rating, notes) VALUES 
                     (1, '14 Feb 2023', '1 hr', '4.0', 'Great Burger. Great Fries. I cant believe he got a grilled cheese again.'),
                     (2, '14 Feb 2023', '1 hr', '5.0', 'We all love this place so much. Dear Seth got a grilled cheese again.'),
                     (3, '14 Feb 2023', '1 hr', '4.0', 'I like burgers.'),
