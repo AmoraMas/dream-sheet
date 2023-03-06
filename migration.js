@@ -25,6 +25,7 @@ function runMigrations(pool, callback){
             (err, data) => {
                 if (err){
                     console.log("CREATE TABLE locations failed");
+                    console.log(err);
                 } else {
                     console.log("locations table created sucessfully");
                 }
@@ -42,6 +43,7 @@ function runMigrations(pool, callback){
             (err, data) => {
                 if (err){
                     console.log("CREATE TABLE accounts failed");
+                    console.log(err);
                 } else {
                     console.log("CREATE TABLE accounts successful");
                 }
@@ -55,6 +57,7 @@ function runMigrations(pool, callback){
             (err, data) => {
                 if (err){
                     console.log("CREATE TABLE types failed");
+                    console.log(err);
                 } else {
                     console.log("CREATE TABLE types successful");
                 }
@@ -68,6 +71,7 @@ function runMigrations(pool, callback){
             (err, data) => {
                 if (err){
                     console.log("CREATE TABLE populations failed");
+                    console.log(err);
                 } else {
                     console.log("CREATE TABLE populations successful");
                 }
@@ -81,6 +85,7 @@ function runMigrations(pool, callback){
             (err, data) => {
                 if (err){
                     console.log("CREATE TABLE climates failed");
+                    console.log(err);
                 } else {
                     console.log("CREATE TABLE climates successful");
                 }
@@ -102,6 +107,7 @@ function runMigrations(pool, callback){
             (err, data) => {
                 if (err){
                     console.log("CREATE TABLE places failed");
+                    console.log(err);
                 } else {
                     console.log("CREATE TABLE places successful");
                 }
@@ -116,6 +122,7 @@ function runMigrations(pool, callback){
             (err, data) => {
                 if (err){
                     console.log("CREATE TABLE dreams failed");
+                    console.log(err);
                 } else {
                     console.log("CREATE TABLE dreams successful");
                 }
@@ -132,6 +139,7 @@ function runMigrations(pool, callback){
             (err, data) => {
                 if (err){
                     console.log("CREATE TABLE visits failed");
+                    console.log(err);
                 } else {
                     console.log("CREATE TABLE visits successful");
                 }
