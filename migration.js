@@ -25,7 +25,7 @@ function runMigrations(pool, callback){
                     console.log("CREATE TABLE locations failed");
                     console.log(err);
                 } else {
-                    console.log("locations table created sucessfully");
+                    console.log("CREATE TABLE locations sucessful");
                 }
             }
         );
@@ -149,6 +149,6 @@ function runMigrations(pool, callback){
 
 runMigrations(pool, () => {
     // migrations are complete, we can close the pools
-    pool.end();
     done();
+    pool.end();
 })
