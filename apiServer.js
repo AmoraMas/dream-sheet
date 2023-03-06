@@ -1,6 +1,6 @@
 // define dependencies
 const express = require("express");
-const cors = requrie("cors");
+const cors = require("cors");
 const app = express();
 const port = process.env.PORT || 8000;  // Port that Express listens to for requests
 
