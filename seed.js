@@ -129,7 +129,7 @@ function runSeeder(pool, callback){
                 ('Glen Eyrie', 1, '(38.891667,-104.884444)', 2, 1, 2, ' ', ' ', '2.0', 'English style castle built in 1871. Stay overnight and live like English Royalty.'),
                 ('Denver Zoo', 2, '(39.749316, -104.95029)', 2, 2, 6, ' ', ' ', '2.0', 'Theyve got animals and stuff.'),
                 ('Wild Bear Falls', 5, '(35.73208, -83.51874)', 1, 2, 6, ' ', ' ', '2.0', 'Huge indoor water park.'),
-                ('Eiffel Tower', 10, '(48.858222,2.2945)', 1, 3, 6, ' ', ' ', '5.0'. 'Most romantic place in the world and an amazing piece of architecture.'),
+                ('Eiffel Tower', 10, '(48.858222,2.2945)', 1, 3, 6, ' ', ' ', '5.0', 'Most romantic place in the world and an amazing piece of architecture.'),
                 ('Sydney Opera House', 15, '(-33.857213, 151.215144)', 1, 3, 6, ' ', ' ', '5.0', 'Must see place when you visit Austrailia. Plus they have great music shows.');`, 
                 (err, data) => {
                     if (err){
@@ -171,7 +171,7 @@ function runSeeder(pool, callback){
                     (1, '14 Feb 2023', '1 hr', '4.0', 'Great Burger. Great Fries. I cant believe he got a grilled cheese again.'),
                     (2, '14 Feb 2023', '1 hr', '5.0', 'We all love this place so much. Dear Seth got a grilled cheese again.'),
                     (3, '14 Feb 2023', '1 hr', '4.0', 'I like burgers.'),
-                    (4, '14 Feb 2023', '1 hr', '2.0', 'Grilled cheese, yum. Its not like moms though.';`,
+                    (4, '14 Feb 2023', '1 hr', '2.0', 'Grilled cheese, yum. Its not like moms though.');`,
                     (err, data) => {
                         if (err){
                             console.log("INSERT INTO visits failed");
