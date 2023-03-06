@@ -32,6 +32,7 @@ function runMigrations1(pool, callback){
                 } else {
                     console.log("locations table created sucessfully");
                 }
+                done();
             }
         );
     });
@@ -62,6 +63,7 @@ function runMigrations2(pool, callback){
                 } else {
                     console.log("CREATE TABLE accounts successful");
                 }
+                done();
             }
         );
 
@@ -76,6 +78,7 @@ function runMigrations2(pool, callback){
                 } else {
                     console.log("CREATE TABLE types successful");
                 }
+                done();
             }
         );
 
@@ -90,6 +93,7 @@ function runMigrations2(pool, callback){
                 } else {
                     console.log("CREATE TABLE populations successful");
                 }
+                done();
             }
         );
 
@@ -104,6 +108,7 @@ function runMigrations2(pool, callback){
                 } else {
                     console.log("CREATE TABLE climates successful");
                 }
+                done();
             }
         );
     });
@@ -138,6 +143,7 @@ function runMigrations3(pool, callback){
                 } else {
                     console.log("CREATE TABLE places successful");
                 }
+                done();
             }
         );
     });
@@ -165,6 +171,7 @@ function runMigrations4(pool, callback){
                 } else {
                     console.log("CREATE TABLE dreams successful");
                 }
+                done();
             }
         );
     });
@@ -194,6 +201,7 @@ function runMigrations5(pool, callback){
                 } else {
                     console.log("CREATE TABLE visits successful");
                 }
+                done();
             }
         );
     });
