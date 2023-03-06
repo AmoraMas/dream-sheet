@@ -1,12 +1,7 @@
 
 const { Pool } = require('pg');
 const dbConn = require('./dbConn');
-const pool1 = dbConn.getPool();
-const pool2 = dbConn.getPool();
-const pool3 = dbConn.getPool();
-const pool4 = dbConn.getPool();
-const pool5 = dbConn.getPool();
-
+const pool = dbConn.getPool();
 
 // establish a connection we can close with a callback
 function runMigrations1(pool, callback){
@@ -32,27 +27,14 @@ function runMigrations1(pool, callback){
                 } else {
                     console.log("locations table created sucessfully");
                 }
-                done();
             }
         );
-    });
-}
-
-// establish a connection we can close with a callback
-function runMigrations2(pool, callback){
-    // connect to DB
-    pool2.connect((err, client, done) => {
-        if (err) {
-            console.log("Failed to connect to the database");
-            console.error(err);
-            return done();
-        }
 
         pool.query(`CREATE TABLE IF NOT EXISTS accounts (
             id SERIAL PRIMARY KEY NOT NULL,
             name varchar(50),
             email varchar(100),
-            location_id integer NOT NULL REFERENCES location,
+            location_id integer NOT NULL,
             pw_salt varchar(100),
             pw_hash varchar(100),
             is_admin BOOLEAN NOT NULL DEFAULT FALSE)`,
@@ -63,7 +45,6 @@ function runMigrations2(pool, callback){
                 } else {
                     console.log("CREATE TABLE accounts successful");
                 }
-                done();
             }
         );
 
@@ -78,7 +59,6 @@ function runMigrations2(pool, callback){
                 } else {
                     console.log("CREATE TABLE types successful");
                 }
-                done();
             }
         );
 
@@ -93,7 +73,6 @@ function runMigrations2(pool, callback){
                 } else {
                     console.log("CREATE TABLE populations successful");
                 }
-                done();
             }
         );
 
@@ -108,30 +87,17 @@ function runMigrations2(pool, callback){
                 } else {
                     console.log("CREATE TABLE climates successful");
                 }
-                done();
             }
         );
-    });
-}
-
-// establish a connection we can close with a callback
-function runMigrations3(pool, callback){
-    // connect to DB
-    pool3.connect((err, client, done) => {
-        if (err) {
-            console.log("Failed to connect to the database");
-            console.error(err);
-            return done();
-        }
 
         pool.query(`CREATE TABLE IF NOT EXISTS places (
             id SERIAL PRIMARY KEY NOT NULL,
             name VARCHAR(50) NOT NULL,
-            location_id INTEGER NOT NULL REFERENCES location,
+            location_id INTEGER NOT NULL,
             lat_long point,
-            climate_id INTEGER REFERENCES climate,
-            population_id INTEGER REFERENCES population,
-            type_id INTEGER REFERENCES type,
+            climate_id INTEGER,
+            population_id INTEGER,
+            type_id INTEGER,
             thumbnail VARCHAR(200),
             link VARCHAR(200),
             cost DECIMAL(2,1),
@@ -143,26 +109,13 @@ function runMigrations3(pool, callback){
                 } else {
                     console.log("CREATE TABLE places successful");
                 }
-                done();
             }
         );
-    });
-}
-
-// establish a connection we can close with a callback
-function runMigrations4(pool, callback){
-    // connect to DB
-    pool4.connect((err, client, done) => {
-        if (err) {
-            console.log("Failed to connect to the database");
-            console.error(err);
-            return done();
-        }
 
         pool.query(`CREATE TABLE IF NOT EXISTS dreams (
             id SERIAL PRIMARY KEY NOT NULL,
-            account_id INTEGER NOT NULL REFERENCES accounts,
-            place_id INTEGER NOT NULL REFERENCES places,
+            account_id INTEGER NOT NULL,
+            place_id INTEGER NOT NULL,
             notes TEXT)`,
             (err, data) => {
                 if (err){
@@ -171,25 +124,12 @@ function runMigrations4(pool, callback){
                 } else {
                     console.log("CREATE TABLE dreams successful");
                 }
-                done();
             }
         );
-    });
-}
-
-// establish a connection we can close with a callback
-function runMigrations5(pool, callback){
-    // connect to DB
-    pool5.connect((err, client, done) => {
-        if (err) {
-            console.log("Failed to connect to the database");
-            console.error(err);
-            return done();
-        }
 
         pool.query(`CREATE TABLE IF NOT EXISTS visits (
             id SERIAL PRIMARY KEY NOT NULL,
-            dream_id INTEGER NOT NULL REFERENCES dreams,
+            dream_id INTEGER NOT NULL,
             date_visited DATE,
             length_visited VARCHAR(10),
             rating DECIMAL(2,1),
@@ -201,7 +141,6 @@ function runMigrations5(pool, callback){
                 } else {
                     console.log("CREATE TABLE visits successful");
                 }
-                done();
             }
         );
     });
@@ -209,18 +148,6 @@ function runMigrations5(pool, callback){
 
 
 runMigrations1(pool1, () => {
-    pool1.end();
-    runMigrations2(pool2, () => {
-        pool2.end();
-        runMigrations3(pool3, () => {
-            pool3.end();
-            runMigrations4(pool4, () => {
-                pool4.end();
-                runMigrations5(pool5, () => {
-                    // migrations are complete, we can close the pools
-                    pool5.end();
-                })
-            })
-        })
-    })
+    // migrations are complete, we can close the pools
+    pool.end();
 })
