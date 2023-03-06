@@ -1,13 +1,17 @@
 
 const { Pool } = require('pg');
 const dbConn = require('./dbConn');
-const pool = dbConn.getPool();
+const pool1 = dbConn.getPool();
+const pool2 = dbConn.getPool();
+const pool3 = dbConn.getPool();
+const pool4 = dbConn.getPool();
+const pool5 = dbConn.getPool();
 
 
 // establish a connection we can close with a callback
 function runMigrations1(pool, callback){
     // connect to DB
-    pool.connect((err, client, done) => {
+    pool1.connect((err, client, done) => {
         if (err) {
             console.log("Failed to connect to the database");
             console.error(err);
@@ -36,7 +40,7 @@ function runMigrations1(pool, callback){
 // establish a connection we can close with a callback
 function runMigrations2(pool, callback){
     // connect to DB
-    pool.connect((err, client, done) => {
+    pool2.connect((err, client, done) => {
         if (err) {
             console.log("Failed to connect to the database");
             console.error(err);
@@ -108,7 +112,7 @@ function runMigrations2(pool, callback){
 // establish a connection we can close with a callback
 function runMigrations3(pool, callback){
     // connect to DB
-    pool.connect((err, client, done) => {
+    pool3.connect((err, client, done) => {
         if (err) {
             console.log("Failed to connect to the database");
             console.error(err);
@@ -142,7 +146,7 @@ function runMigrations3(pool, callback){
 // establish a connection we can close with a callback
 function runMigrations4(pool, callback){
     // connect to DB
-    pool.connect((err, client, done) => {
+    pool4.connect((err, client, done) => {
         if (err) {
             console.log("Failed to connect to the database");
             console.error(err);
@@ -169,7 +173,7 @@ function runMigrations4(pool, callback){
 // establish a connection we can close with a callback
 function runMigrations5(pool, callback){
     // connect to DB
-    pool.connect((err, client, done) => {
+    pool5.connect((err, client, done) => {
         if (err) {
             console.log("Failed to connect to the database");
             console.error(err);
@@ -197,15 +201,15 @@ function runMigrations5(pool, callback){
 
 
 runMigrations1(pool1, () => {
+    pool1.end();
     runMigrations2(pool2, () => {
-        pool1.end();
+        pool2.end();
         runMigrations3(pool3, () => {
-            pool2.end();
+            pool3.end();
             runMigrations4(pool4, () => {
-                pool3.end();
+                pool4.end();
                 runMigrations5(pool5, () => {
                     // migrations are complete, we can close the pools
-                    pool4.end();
                     pool5.end();
                 })
             })
