@@ -58,9 +58,9 @@ app.get("/api/places", (req, res, next) => {
   })
 });
 
-// return all entries for table location
-app.get("/api/location", (req, res, next) => {
-  const result = pool.query('SELECT * FROM location;', (err, data) => {
+// return all entries for table locations
+app.get("/api/locations", (req, res, next) => {
+  const result = pool.query('SELECT * FROM locations;', (err, data) => {
     if (err) {
       return next ({ status: 500, message: err });
     }
@@ -78,9 +78,9 @@ app.get("/api/visits", (req, res, next) => {
   })
 });
 
-// return all entries for table type
-app.get("/api/type", (req, res, next) => {
-  const result = pool.query('SELECT * FROM type;', (err, data) => {
+// return all entries for table types
+app.get("/api/types", (req, res, next) => {
+  const result = pool.query('SELECT * FROM types;', (err, data) => {
     if (err) {
       return next ({ status: 500, message: err });
     }
@@ -88,9 +88,9 @@ app.get("/api/type", (req, res, next) => {
   })
 });
 
-// return all entries for table population
-app.get("/api/population", (req, res, next) => {
-  const result = pool.query('SELECT * FROM population;', (err, data) => {
+// return all entries for table populations
+app.get("/api/populations", (req, res, next) => {
+  const result = pool.query('SELECT * FROM populations;', (err, data) => {
     if (err) {
       return next ({ status: 500, message: err });
     }
@@ -98,9 +98,9 @@ app.get("/api/population", (req, res, next) => {
   })
 });
 
-// return all entries for table climate
-app.get("/api/climate", (req, res, next) => {
-  const result = pool.query('SELECT * FROM climate;', (err, data) => {
+// return all entries for table climates
+app.get("/api/climates", (req, res, next) => {
+  const result = pool.query('SELECT * FROM climates;', (err, data) => {
     if (err) {
       return next ({ status: 500, message: err });
     }
@@ -132,7 +132,7 @@ app.get("/api/account/:id", (req, res, next) => {
 
 // retun only the dreams entries for account
 app.get("/api/account/:id/dreams", (req, res, next) => {
-  let id = parseInt(req.params.accountid);
+  let id = parseInt(req.params.id);
     if (!Number.isInteger(id)) {
     return next({ status: 404, message: "Please enter an account id" });
   }
@@ -151,7 +151,7 @@ app.get("/api/account/:id/dreams", (req, res, next) => {
 
 // retun only the place entries for id
 app.get("/api/place/:id", (req, res, next) => {
-  let id = parseInt(req.params.accountid);
+  let id = parseInt(req.params.id);
     if (!Number.isInteger(id)) {
     return next({ status: 404, message: "Please enter an dream id" });
   }
@@ -170,7 +170,7 @@ app.get("/api/place/:id", (req, res, next) => {
 
 // retun only the location entries for id
 app.get("/api/location/:id", (req, res, next) => {
-  let id = parseInt(req.params.accountid);
+  let id = parseInt(req.params.id);
     if (!Number.isInteger(id)) {
     return next({ status: 404, message: "Please enter an location id" });
   }
@@ -189,7 +189,7 @@ app.get("/api/location/:id", (req, res, next) => {
 
 // retun only the visit entries for id
 app.get("/api/visit/:id", (req, res, next) => {
-  let id = parseInt(req.params.accountid);
+  let id = parseInt(req.params.id);
     if (!Number.isInteger(id)) {
     return next({ status: 404, message: "Please enter an visit id" });
   }
@@ -208,7 +208,7 @@ app.get("/api/visit/:id", (req, res, next) => {
 
 // retun only the type entries for id
 app.get("/api/type/:id", (req, res, next) => {
-  let id = parseInt(req.params.accountid);
+  let id = parseInt(req.params.id);
     if (!Number.isInteger(id)) {
     return next({ status: 404, message: "Please enter an type id" });
   }
@@ -227,7 +227,7 @@ app.get("/api/type/:id", (req, res, next) => {
 
 // retun only the population entries for id
 app.get("/api/population/:id", (req, res, next) => {
-  let id = parseInt(req.params.accountid);
+  let id = parseInt(req.params.id);
     if (!Number.isInteger(id)) {
     return next({ status: 404, message: "Please enter an population id" });
   }
@@ -246,7 +246,7 @@ app.get("/api/population/:id", (req, res, next) => {
 
 // retun only the climate entries for id
 app.get("/api/climate/:id", (req, res, next) => {
-  let id = parseInt(req.params.accountid);
+  let id = parseInt(req.params.id);
     if (!Number.isInteger(id)) {
     return next({ status: 404, message: "Please enter an climate id" });
   }
