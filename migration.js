@@ -78,7 +78,7 @@ function runMigrations(pool, callback){
 
         pool.query(`CREATE TABLE IF NOT EXISTS climates (
             id SERIAL PRIMARY KEY NOT NULL,
-            type VARCHAR(10),
+            type VARCHAR(15),
             description VARCHAR(200))`,
             (err, data) => {
                 if (err){

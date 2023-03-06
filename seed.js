@@ -15,7 +15,7 @@ function runSeeder(pool, callback){
         // Seed data into tables
         pool.query(`SELECT COUNT(*) FROM locations`, (err, data) => {
             if (data.rows[0].count == 0) {
-                pool.query(`INSERT INTO locations (country, state, city, lat-long, notes) VALUES
+                pool.query(`INSERT INTO locations (country, state, city, lat_long, notes) VALUES
                 ('United States', 'Colorado', 'Colorado Springs', (38.857747, -104.773865), 'Center of Colorado.'),
                 ('United States', 'Colorado', 'Denver', (39.784127, -104.985352), 'Capital of Colorado. Biggest city in the state.'),
                 ('United States', 'Nevada', 'Las Vegas', (36.173209, -115.176544), 'USA gambling center. Beware what you spend here.'),
@@ -28,8 +28,8 @@ function runSeeder(pool, callback){
                 ('France', '', 'Paris', (48.852849, 2.352448), 'Cafes galore and the Eiffel Tower.'),
                 ('United Kingdom', 'Great Brittain', 'London', (51.503386, -0.118103), 'Who wants a spot of tea?'),
                 ('Ireland', '', 'Dublin', (53.347163, -6.266327), 'Ireland is such a beautiful country.'),
-                ('Italy', '', 'Napoli', (40.904656, 14.260254), 'Italy at it\'s best.'),
-                ('Italy', '', 'Roma', (41.891782, 12.477722), 'Roma wasn\'t built in a day.'),
+                ('Italy', '', 'Napoli', (40.904656, 14.260254), 'Italy at its best.'),
+                ('Italy', '', 'Roma', (41.891782, 12.477722), 'Roma wasnt built in a day.'),
                 ('Austrailia', '', 'Sydney', (-33.880145, 151.051025), 'Who wants shimp on the barbee?'),
                 ('New Zealand', '', 'Auckland', (-36.855596, 174.765015));`,
                     (err, data) => {
@@ -70,7 +70,7 @@ function runSeeder(pool, callback){
                     ('Hotel', 'Room to rent for the night, weekend, or week.'),
                     ('Vacation', 'Time to really get away and try someplace brand new.'),
                     ('Beach', 'Visit the water.'),
-                    ('City', 'Visit a city you\'ve never been and explore.')
+                    ('City', 'Visit a city youve never been and explore.')
                     ('Attraction', 'Come and see something amazing and new.');`,
                     (err, data) => {
                         if (err){
@@ -88,7 +88,7 @@ function runSeeder(pool, callback){
             if (data.rows[0].count == 0) {
                 pool.query(`INSERT INTO populations (type, description) VALUES 
                     ('Small', 'Think small town. '),
-                    ('Middle', 'Somewhere in between. You\'re not alone, but you\'re also not bumping into people.'),
+                    ('Middle', 'Somewhere in between. Youre not alone, but youre also not bumping into people.'),
                     ('High', 'Very dense. Think big city.');`,
                     (err, data) => {
                         if (err){
@@ -124,10 +124,10 @@ function runSeeder(pool, callback){
 
         pool.query(`SELECT COUNT(*) FROM places`, (err, data) => {
             if (data.rows[0].count == 0) {
-                pool.query(`INSERT INTO places (name, location_id, lat-long, climate_id, population_id, type_id, thumbnail, link, cost, details) VALUES 
+                pool.query(`INSERT INTO places (name, location_id, lat_long, climate_id, population_id, type_id, thumbnail, link, cost, details) VALUES 
                 ('Five Guys', 1, (38.810716, -104.823212), 2, 1, 1, '', '', '1.0', 'Custom burgers and the fries are awesome.'),
                 ('Glen Eyrie', 1, (38.891667,-104.884444), 2, 1, 2, '', '', '2.0', 'English style castle built in 1871. Stay overnight and live like English Royalty.'),
-                ('Denver Zoo', 2, (39.749316, -104.95029), 2, 2, 6, '', '', '2.0', 'They\'ve got animals and stuff.'),
+                ('Denver Zoo', 2, (39.749316, -104.95029), 2, 2, 6, '', '', '2.0', 'Theyve got animals and stuff.'),
                 ('Wild Bear Falls', 5, (35.73208, -83.51874), 1, 2, 6, '', '', '2.0', 'Huge indoor water park.'),
                 ('Eiffel Tower', 10, (48.858222,2.2945), 1, 3, 6, '', '', '5.0'. 'Most romantic place in the world and an amazing piece of architecture.'),
                 ('Sydney Opera House', 15, (-33.857213, 151.215144), 1, 3, 6, '', '', '5.0', 'Must see place when you visit Austrailia. Plus they have great music shows.');`, 
@@ -141,7 +141,6 @@ function runSeeder(pool, callback){
                 }
                 );
             }
-            checkComplete();
         });
 
         pool.query(`SELECT COUNT(*) FROM dreams`, (err, data) => {
@@ -153,7 +152,7 @@ function runSeeder(pool, callback){
                     (4, 1, 'Grilled Cheese.'),
                     (2, 2, 'My girlfriend just went and it sounds AMAZING. I wanna go so bad.'),
                     (2, 4, 'I\'ve been trying to get my husband to take me here for forever.'),
-                    (1, 6, 'If I\'m going somewhere, let\'s go somewhere amazing.');`,
+                    (1, 6, 'If Im going somewhere, lets go somewhere amazing.');`,
                     (err, data) => {
                         if (err){
                             console.log("INSERT INTO dreams failed");
@@ -168,11 +167,11 @@ function runSeeder(pool, callback){
 
         pool.query(`SELECT COUNT(*) FROM visits`, (err, data) => {
             if (data.rows[0].count == 0) {
-                pool.query(`INSERT INTO visits (dreams_id, date-visited, length-visited, rating, notes) VALUES 
+                pool.query(`INSERT INTO visits (dreams_id, date_visited, length_visited, rating, notes) VALUES 
                     (1, '14 Feb 2023', '1 hr', '4.0', 'Great Burger. Great Fries. I can't believe he got a grilled cheese again.'),
                     (2, '14 Feb 2023', '1 hr', '5.0', 'We all love this place so much. Dear Seth got a grilled cheese again.'),
                     (3, '14 Feb 2023', '1 hr', '4.0', 'I like burgers.'),
-                    (4, '14 Feb 2023', '1 hr', '2.0', 'Grilled cheese, yum. It\'s not like mom\'s though.';`,
+                    (4, '14 Feb 2023', '1 hr', '2.0', 'Grilled cheese, yum. Its not like moms though.';`,
                     (err, data) => {
                         if (err){
                             console.log("INSERT INTO visits failed");
@@ -190,4 +189,5 @@ function runSeeder(pool, callback){
 runSeeder(pool, () => {
     // seeding is done, so we can close the pool
     pool.end();
+    done();
 })
