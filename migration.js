@@ -4,7 +4,7 @@ const dbConn = require('./dbConn');
 const pool = dbConn.getPool();
 
 // establish a connection we can close with a callback
-function runMigrations1(pool, callback){
+function runMigrations(pool, callback){
     // connect to DB
     pool.connect((err, client, done) => {
         if (err) {
@@ -147,7 +147,8 @@ function runMigrations1(pool, callback){
 }
 
 
-runMigrations1(pool1, () => {
+runMigrations(pool, () => {
     // migrations are complete, we can close the pools
     pool.end();
+    done();
 })
