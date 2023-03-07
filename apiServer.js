@@ -276,8 +276,8 @@ app.get("/api/climate/:id", (req, res, next) => {
 
 // Adds place to dreams
 app.post("/api/dream", (req, res, next) => {
-  const { account_id, place_id, notes } = req.body;
-  if (!account_id || !place_id) {
+  const { account_id, place_id, dream_notes } = req.body;
+  if (!account_id || !place_id || !dream_notes) {
     return next({ status: 400, message: `Required information was not provided.` });
   }
   const result = pool.query('INSERT INTO dreams (account_id, place_id, dream_notes) VALUES ($1, $2, $3);', [account_id, place_id, dream_notes], (writeError, data) => {
