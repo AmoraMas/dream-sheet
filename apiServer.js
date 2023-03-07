@@ -13,6 +13,9 @@ app.use(express.json());
 const dbConn = require('./dbConn');
 const pool = dbConn.getPool();
 
+// serve your css and js as static to work with your .html
+app.use(express.static(__dirname));
+
 // listen to the port
 app.listen(port, function () {
   console.log(`Server is listening on port ${port}.`);
@@ -25,6 +28,14 @@ app.listen(port, function () {
 // test request to verify this file is working
 app.get("/api/test", (req, res, next) => {
   res.send('Programming is awesome! This page works!');
+})
+
+// html page request to send index.html to the user
+app.get("/", (req, res, next) => {
+  res.sendFile(__dirname + "/index.html");
+})
+app.get("/index.html", (req, res, next) => {
+  res.sendFile(__dirname + "/index.html");
 })
 
 // ROUTES FOR EVERYTHING IN TABLE

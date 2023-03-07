@@ -19,7 +19,7 @@ function runMigrations(pool, callback){
             state VARCHAR(25),
             city VARCHAR(25),
             lat_long POINT,
-            notes TEXT)`,
+            location_notes TEXT)`,
             (err, data) => {
                 if (err){
                     console.log("CREATE TABLE locations failed");
@@ -50,8 +50,8 @@ function runMigrations(pool, callback){
 
         pool.query(`CREATE TABLE IF NOT EXISTS types (
             id SERIAL PRIMARY KEY NOT NULL,
-            type VARCHAR(20),
-            description VARCHAR(200))`,
+            ttype VARCHAR(20),
+            tdescription VARCHAR(200))`,
             (err, data) => {
                 if (err){
                     console.log("CREATE TABLE types failed");
@@ -64,8 +64,8 @@ function runMigrations(pool, callback){
 
         pool.query(`CREATE TABLE IF NOT EXISTS populations (
             id SERIAL PRIMARY KEY NOT NULL,
-            type VARCHAR(10),
-            description VARCHAR(200))`,
+            ptype VARCHAR(10),
+            pdescription VARCHAR(200))`,
             (err, data) => {
                 if (err){
                     console.log("CREATE TABLE populations failed");
@@ -78,8 +78,8 @@ function runMigrations(pool, callback){
 
         pool.query(`CREATE TABLE IF NOT EXISTS climates (
             id SERIAL PRIMARY KEY NOT NULL,
-            type VARCHAR(15),
-            description VARCHAR(200))`,
+            ctype VARCHAR(15),
+            cdescription VARCHAR(200))`,
             (err, data) => {
                 if (err){
                     console.log("CREATE TABLE climates failed");
@@ -116,7 +116,7 @@ function runMigrations(pool, callback){
             id SERIAL PRIMARY KEY NOT NULL,
             account_id INTEGER NOT NULL,
             place_id INTEGER NOT NULL,
-            notes TEXT)`,
+            dream_notes TEXT)`,
             (err, data) => {
                 if (err){
                     console.log("CREATE TABLE dreams failed");
@@ -133,7 +133,7 @@ function runMigrations(pool, callback){
             date_visited DATE,
             length_visited VARCHAR(10),
             rating DECIMAL(2,1),
-            notes TEXT)`,
+            visit_notes TEXT)`,
             (err, data) => {
                 if (err){
                     console.log("CREATE TABLE visits failed");

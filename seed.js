@@ -65,7 +65,7 @@ function runSeeder(pool, callback){
 
         pool.query(`SELECT COUNT(*) FROM types`, (err, data) => {
             if (data.rows[0].count == 0) {
-                pool.query(`INSERT INTO types (type, description) VALUES 
+                pool.query(`INSERT INTO types (ttype, tdescription) VALUES 
                     ('Restaurant', 'Short getaway to eat great food.'),
                     ('Hotel', 'Room to rent for the night, weekend, or week.'),
                     ('Vacation', 'Time to really get away and try someplace brand new.'),
@@ -86,7 +86,7 @@ function runSeeder(pool, callback){
 
         pool.query(`SELECT COUNT(*) FROM populations`, (err, data) => {
             if (data.rows[0].count == 0) {
-                pool.query(`INSERT INTO populations (type, description) VALUES 
+                pool.query(`INSERT INTO populations (ptype, pdescription) VALUES 
                     ('Small', 'Think small town. '),
                     ('Middle', 'Somewhere in between. Youre not alone, but youre also not bumping into people.'),
                     ('High', 'Very dense. Think big city.');`,
@@ -104,7 +104,7 @@ function runSeeder(pool, callback){
 
         pool.query(`SELECT COUNT(*) FROM climates`, (err, data) => {
             if (data.rows[0].count == 0) {
-                pool.query(`INSERT INTO climates (type, description) VALUES 
+                pool.query(`INSERT INTO climates (ctype, cdescription) VALUES 
                     ('Tropical', 'Hot and humid. The average temperatures are greater than 64°F (18°C) year-round and there is more than 59 inches of precipitation each year.'),
                     ('Dry', 'Very dry with very little precipitation.'),
                     ('Temperate', 'Typically warm and humid summers with thunderstorms and mild winters.'),
