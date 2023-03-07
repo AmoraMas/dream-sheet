@@ -9,12 +9,12 @@ hr {
 .everything {
     transform: translate(-50%, 0%);
     position: absolute;
-    width: 750px;
+    width: 75%;
     left: 50%;
 }
 
-.dreams,
-.places,
+#dreams,
+#places,
 .card,
 .create-place-form {
     border-radius: 20px;
@@ -23,8 +23,8 @@ hr {
     display: flex;
 }
 
-.dreams,
-.places {
+#dreams,
+#places {
     margin-right: auto;
     margin-left: auto;
     width: 95%;

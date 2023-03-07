@@ -1,5 +1,9 @@
 const route = 'https://dream-sheet.onrender.com/';
 let accountID = null;
+let accountLocation = null;
+let isAdmin = false;
+let accountEmail = null;
+let accountName = null;
 
 // Code to draw a single place card
 function drawPlaceCard (id, appendTo, otherNote) {
@@ -45,20 +49,59 @@ function drawPlaceCard (id, appendTo, otherNote) {
             let $otherNote = $('<div>').addClass('otherNotes').text(otherNote);
             $card.append($('<hr>'));
             $card.append($otherNote);
+            let $deleteDream = $('<button type="button">').addClass('deleteDream').text('Delete Dream');
+            $deleteDream.click( (data) => {
+                $.ajax({
+                    type: "DELETE",
+                    url: `${route}api/dream/${id}`,
+                    dataType: "json",
+                    success: function (result) {
+                        console.log(result);
+                    }
+                });
+            });
+            $card.append($deleteDream);
         }
         else {
-            $addDream = $('<button type="button">').addClass('addDream').text('Add Dream');
+            let $addDream = $('<button type="button">').addClass('addDream').text('Add Dream').hide(0);
+            $addDream.click( (data) => {
+                let notes = prompt("Please provide some notes for this dream");
+                let submitData = { account_id: accountID, place_id: id, dream_notes: notes };
+                submitData = JSON.stringify(submitData);
+                $.ajax({
+                    type: "POST",
+                    url: `${route}api/dream`,
+                    data: submitData,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        console.log(result);
+                    }
+                });
+            })
             $card.append($addDream);
+                let $deletePlace = $('<button type="button">').addClass('deletePlace').text('Delete Place').hide(0);
+                $deletePlace.click( (datra) => {
+                $.ajax({
+                    type: "DELETE",
+                    url: `${route}api/place/${id}`,
+                    dataType: "json",
+                    success: function (result) {
+                        console.log(result);
+                    }
+                });
+                });
+                $card.append($deletePlace);
         }
-
         $(appendTo).append($card);
     });
 }
 
 
-// Code to start looking for dreams for logged in user
+// Code to populate Account ID list
 $.get( route + 'api/accounts', (data) => { 
     $accountList = $(`<select name="account" id="account">`);
+    // ON CHANGE populate user dreams section
     $accountList.change(function () {
         accountID = $('#account').val();
         $.get(route + 'api/account/'+ $('#account').val() +'/dreams', (data) => {
@@ -67,6 +110,19 @@ $.get( route + 'api/accounts', (data) => {
             for (let i = 0; i < data.length; i++) {
                 drawPlaceCard(data[i].place_id, '#dreams', data[i].dream_notes);
             }
+            $.get(route + 'api/account/' + accountID, (data) => {
+                AccountLocation = data.location_id;
+                isAdmin = data.is_admin;
+                accountEmail = data.email;
+                accountName = data.name;
+                if (isAdmin) {
+                    $('.deletePlace').show(500);
+                }
+                else {
+                    $('.deletePlace').hide(500);
+                }
+                $('.addDream').show(500);
+            })
         });
     });
     let $option = $(`<option value="0"></option>`).text('Select');
@@ -128,29 +184,28 @@ $('.create-place').click(function () {
     $buttonPost.click(function () {
         let placeData = {
             "name": $('#name').val(),
-            "location_id": $('#location').val(),
+            "location_id": Number($('#location').val()),
             "lat_long": $('#lat_long').val(),
-            "climate_id": $('#climate').val(),
-            "population_id": $('#population').val(),
-            "type_id": $('#type').val(),
+            "climate_id": Number($('#climate').val()),
+            "population_id": Number($('#population').val()),
+            "type_id": Number($('#type').val()),
             "thumbnail": $('#thumbnail').val(),
             "link": $('#link').val(),
             "cost": $('#cost').val(),
             "details": $('#details').val(),
         }
         console.log("Submiting Data:", placeData);
-        $.post( route + 'api/place', (placeData) => {
-            
+        placeData = JSON.stringify(placeData);
+        $.ajax({
+            type: "POST",
+            url: `${route}api/place`,
+            data: placeData,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                console.log(result);
+            }
         });
-        // $.ajax({
-        //     type: "POST",
-        //     url: `${route}api/place`,
-        //     data: `${placeData}`,
-        //     success: function (result) {
-        //         console.log(result);
-        //     },
-        //     dataType: "json"
-        // });
 
     });
 

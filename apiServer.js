@@ -274,18 +274,32 @@ app.get("/api/climate/:id", (req, res, next) => {
   });
 });
 
+// Adds place to dreams
+app.post("/api/dream", (req, res, next) => {
+  const { account_id, place_id, notes } = req.body;
+  if (!account_id || !place_id) {
+    return next({ status: 400, message: `Required information was not provided.` });
+  }
+  const result = pool.query('INSERT INTO dreams (account_id, place_id, dream_notes) VALUES ($1, $2, $3);', [account_id, place_id, dream_notes], (writeError, data) => {
+    if (writeError) {
+      return next({ status: 500, message: writeError });
+    }
+    res.send(`Added: { account_id: ${account_id}, place_id: ${place_id}, dream_notes: ${dream_notes} }`);
+  });
+});
+
 
 // Adds new rows to places
 app.post("/api/place", (req, res, next) => {
   const { name, location_id, lat_long, climate_id, population_id, type_id, thumbnail, link, cost, details } = req.body;
-  if ( !name || !location_id || !lat_long || !climate_id || !population_id || !type_id || !thumbnail || !link || !cost || !details || !Number(location_id) || isNaN(climate_id) || isNaN(population_id) || isNaN(type_id) ) {
+  if ( !name || !location_id || !lat_long || !climate_id || !population_id || !type_id || !thumbnail || !link || !cost || !details || isNaN(location_id) || isNaN(climate_id) || isNaN(population_id) || isNaN(type_id) ) {
     return next({ status: 400, message: `Submitted information was incorrect.` });
   }
   const result = pool.query(`INSERT INTO places (name, location_id, lat_long, climate_id, population_id, type_id, thumbnail, link, cost, details) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);`, [name, Number(location_id), lat_long, Number(climate_id), Number(population_id), Number(type_id), thumbnail, link, cost, details], (writeError, data) => {
     if (writeError) {
       return next({ status: 500, message: writeError });
     }
-    res.send(`Added: { name: ${name}, location_id: ${location_id}, lat_long: ${lat_long}, climate_id: ${climate_id}, population_id: ${population_id}, type: ${type}, thumbnail: ${thumbnail}, link: ${link}, cost: ${cost}, details: ${details} }`);
+    res.send(`Added: { name: ${name}, location_id: ${location_id}, lat_long: ${lat_long}, climate_id: ${climate_id}, population_id: ${population_id}, type_id: ${type_id}, thumbnail: ${thumbnail}, link: ${link}, cost: ${cost}, details: ${details} }`);
   });
 });
 
@@ -327,7 +341,7 @@ app.patch("/api/place/:id", (req, res, next) => {
 });
 
 
-// Deletes an row of id from Table 1
+// Deletes an row of id from places
 app.delete("/api/place/:id", (req, res, next) => {
   const id = parseInt(req.params.id);
   // Verify the ID exists
@@ -346,6 +360,29 @@ app.delete("/api/place/:id", (req, res, next) => {
         return next({ status: 500, message: writeError });
       }
       res.send('Deleted place');
+    });
+  });
+});
+
+// Deletes an row of id from dreams
+app.delete("/api/dream/:id", (req, res, next) => {
+  const id = parseInt(req.params.id);
+  // Verify the ID exists
+  const result = pool.query('SELECT * FROM dreams WHERE id = $1;', [id], (readError, deletedData) => {
+    if (readError) {
+      return next({ status: 500, message: readError});
+    }
+    else if (deletedData.rowCount == 0) {
+      return next({status: 404, message: `Dream ${id} does not exist.`});
+    }
+    // store the data that we are about to delete
+    deletedData = deletedData.rows[0];
+    //delete the data
+    const result = pool.query('DELETE FROM dreams WHERE id = $1;', [id], (writeError, data) => {
+      if (writeError) {
+        return next({ status: 500, message: writeError });
+      }
+      res.send('Deleted dream');
     });
   });
 });
