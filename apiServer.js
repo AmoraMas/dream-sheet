@@ -293,101 +293,38 @@ app.post("/api/place", (req, res, next) => {
 // Changes/replaces information in row id of place
 app.patch("/api/place/:id", (req, res, next) => {
   const id = parseInt(req.params.id);
-  const request = req.body;
-  let list = [name, location_id, lat_long, climate_id, population_id, type_id, thumbnail, link, cost, details];
-  for (let key of request) {
-    if (!list.includes(key)) {
-      return next({status: 400, message: 'Bad information provided. Key name. ' + key});
-    }
-    else if (key.endsWith('_id') && !Number(request[key])) {
-      return next({status: 400, message: 'Bad information provided. Key name. ' + key + ' Key Value. ' + request[key]});
-    }
-  }
-  for (let key in request) {
-    const result = pool.query('UPDATE places SET ' + key + '=$1 WHERE id = $2;', [request[key], id], (writeError, data)=> {
-      if (writeError) {
-        return next({status: 500, message: writeError});
-      }
-      res.send(`Added requested information.`);
-    });
-  }
-
-
-
-  const result1 = pool.query('SELECT * FROM accounts WHERE id = $1;', [idAcc], (readError, data) => {
+  // Check if id in places exist
+  const result = pool.query('SELECT * FROM places WHERE id = $1;', [id], (readError, data) => {
     if (readError) {
       return next({ status: 500, message: readError});
     }
     else if (data.rowCount == 0) {
-      return next({status: 404, message: 'Account ${idAcc} does not exist.'});
+      return next({status: 404, message: `Place ${id} does not exist.`});
     }
-    const result2 = pool.query('SELECT * FROM deposits WHERE id = $1 AND account_id = $2;', [idDep, idAcc], (readError, data) => {
-      if (readError) {
-      return next({ status: 500, message: readError});
+    // Check if submitted body has good information
+    const result = req.body;
+    let list = [name, location_id, lat_long, climate_id, population_id, type_id, thumbnail, link, cost, details];
+    // Only has expected keys and expected integers are integers
+    for (let key of request) {
+      if (!list.includes(key)) {
+        return next({status: 400, message: 'Bad information provided. Key name. ' + key});
       }
-      else if (data.rowCount == 0) {
-        return next({status: 404, message: 'Deposit ${idDep} from Account ${idAcc} does not exist.'});
-      }
-    })
-    // for loop allows for changing more than one value at a time
-    for (let key in request){
-      if (key == 'amount' && !Number(request[key])) {
-        return next({stutus: 400, message: 'Submitted amount is not a number.'})
-      }
-      else if (key == 'amount') {
-        const result = pool.query('UPDATE deposits SET amount=$1 WHERE id = $2;', [request[key], idDep], (writeError, data)=> {
-          if (writeError) {
-            return next({status: 500, message: writeError});
-          }
-        });
-      }
-      else if (key == 'who') {
-        const result = pool.query('UPDATE deposits SET who=$1 WHERE id = $2;', [request[key], idDep], (writeError, data)=> {
-          if (writeError) {
-            return next({status: 500, message: writeError});
-          }
-        });
-      }
-      else if (key == 'date') {
-        const result = pool.query('UPDATE deposits SET date=$1 WHERE id = $2;', [request[key], idDep], (writeError, data) => {
-          if (writeError) {
-            return next({status: 500, message: writeError});
-          }
-        });
-      }
-      else if (key == 'note') {
-        const result = pool.query('UPDATE deposits SET note=$1 WHERE id = $2;', [request[key], idDep], (writeError, data) => {
-          if (writeError) {
-            return next({status: 500, message: writeError});
-          }
-        });
-      }
-      else if (key == 'account_id') {
-        const result = pool.query('SELECT * FROM accounts WHERE accounts_id = $1;', [account_id], (readError, data) => {
-          if (readError) {
-            return next({ status: 500, message: readError});
-          }
-          else if (data.rowCount == 0) {
-            return next({status: 404, message: 'Account ${request[key]} to change to does not exist.'});
-          }
-          const result = pool.query('UPDATE deposits SET account_id=$1 WHERE id = $2;', [request[key], idDep], (writeError, data) => {
-            if (writeError) {
-              return next({status: 500, message: writeError});
-            }
-          });
-        });
-      }
-      else {
-        return next({status: 400, message: 'Request was bad. Can only change "amount", "who", "date", and/or "note"'})
+      else if (key.endsWith('_id') && !Number(request[key])) {
+        return next({status: 400, message: 'Bad information provided. Key name. ' + key + ' Key Value. ' + request[key]});
       }
     }
-    const result = pool.query('SELECT * FROM deposits WHERE id = $1;', [idDep], (readError, updatedData) => {
-      updatedData = updatedData.rows[0];
-      res.send('Updated: { id: ${updatedData.id}, account_id: ${updatedData.account_id}, amount: ${updatedData.amount}, who: ${updatedData.who}, date: ${updatedData.date}, note: ${updatedData.note} }');
-    });
+    // Perform the update for each key value requested
+    for (let key in request) {
+      let text = 'UPDATE places SET ' + key + '=$1 WHERE id = $2;'
+      const result = pool.query(text, [request[key], id], (writeError, data)=> {
+        if (writeError) {
+          return next({status: 500, message: writeError});
+        }
+        res.send(`Added requested information.`);
+      });
+    }
   });
 });
-
 
 
 // Deletes an row of id from Table 1
