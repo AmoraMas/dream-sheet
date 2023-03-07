@@ -117,12 +117,12 @@ app.get("/api/account/:id", (req, res, next) => {
     if (!Number.isInteger(id)) {
     return next({ status: 404, message: "Please enter an account id" });
   }
-  const result = pool.query(`SELECT * FROM accounts WHERE id = $1;`, [id], (err, data) => {
+  const result = pool.query('SELECT * FROM accounts WHERE id = $1;', [id], (err, data) => {
     if (err) {
       return next({ status: 500, message: err});
     }
     else if (data.rowCount == 0) {
-      return next({ status: 404, message: `Please enter a valid account id` });
+      return next({ status: 404, message: 'Please enter a valid account id' });
     }
     else {
       res.send(data.rows[0]);
@@ -136,15 +136,15 @@ app.get("/api/account/:id/dreams", (req, res, next) => {
     if (!Number.isInteger(id)) {
     return next({ status: 404, message: "Please enter an account id" });
   }
-  const result = pool.query(`SELECT * FROM dreams WHERE account_id = $1;`, [id], (err, data) => {
+  const result = pool.query('SELECT * FROM dreams WHERE account_id = $1;', [id], (err, data) => {
     if (err) {
       return next({ status: 500, message: err});
     }
     else if (data.rowCount == 0) {
-      return next({ status: 404, message: `Please enter a valid account id` });
+      return next({ status: 404, message: 'Please enter a valid account id' });
     }
     else {
-      res.send(data.rows[0]);
+      res.send(data.rows);
     }
   });
 });
@@ -153,14 +153,14 @@ app.get("/api/account/:id/dreams", (req, res, next) => {
 app.get("/api/place/:id", (req, res, next) => {
   let id = parseInt(req.params.id);
     if (!Number.isInteger(id)) {
-    return next({ status: 404, message: "Please enter an dream id" });
+    return next({ status: 404, message: "Please enter an place id" });
   }
-  const result = pool.query(`SELECT * FROM places WHERE id = $1;`, [id], (err, data) => {
+  const result = pool.query('SELECT * FROM places INNER JOIN locations ON places.location_id = locations.id INNER JOIN climates ON places.climate_id = climates.id INNER JOIN populations ON places.population_id = populations.id INNER JOIN types ON places.type_id = types.id WHERE places.id = $1;', [id], (err, data) => {
     if (err) {
       return next({ status: 500, message: err});
     }
     else if (data.rowCount == 0) {
-      return next({ status: 404, message: `Please enter a valid account id` });
+      return next({ status: 404, message: 'Please enter a valid place id' });
     }
     else {
       res.send(data.rows[0]);
@@ -174,12 +174,12 @@ app.get("/api/location/:id", (req, res, next) => {
     if (!Number.isInteger(id)) {
     return next({ status: 404, message: "Please enter an location id" });
   }
-  const result = pool.query(`SELECT * FROM locations WHERE id = $1;`, [id], (err, data) => {
+  const result = pool.query('SELECT * FROM locations WHERE id = $1;', [id], (err, data) => {
     if (err) {
       return next({ status: 500, message: err});
     }
     else if (data.rowCount == 0) {
-      return next({ status: 404, message: `Please enter a valid location id` });
+      return next({ status: 404, message: 'Please enter a valid location id' });
     }
     else {
       res.send(data.rows[0]);
@@ -193,12 +193,12 @@ app.get("/api/visit/:id", (req, res, next) => {
     if (!Number.isInteger(id)) {
     return next({ status: 404, message: "Please enter an visit id" });
   }
-  const result = pool.query(`SELECT * FROM visits WHERE id = $1;`, [id], (err, data) => {
+  const result = pool.query('SELECT * FROM visits WHERE id = $1;', [id], (err, data) => {
     if (err) {
       return next({ status: 500, message: err});
     }
     else if (data.rowCount == 0) {
-      return next({ status: 404, message: `Please enter a valid visit id` });
+      return next({ status: 404, message: 'Please enter a valid visit id' });
     }
     else {
       res.send(data.rows[0]);
@@ -212,12 +212,12 @@ app.get("/api/type/:id", (req, res, next) => {
     if (!Number.isInteger(id)) {
     return next({ status: 404, message: "Please enter an type id" });
   }
-  const result = pool.query(`SELECT * FROM types WHERE id = $1;`, [id], (err, data) => {
+  const result = pool.query('SELECT * FROM types WHERE id = $1;', [id], (err, data) => {
     if (err) {
       return next({ status: 500, message: err});
     }
     else if (data.rowCount == 0) {
-      return next({ status: 404, message: `Please enter a valid type id` });
+      return next({ status: 404, message: 'Please enter a valid type id' });
     }
     else {
       res.send(data.rows[0]);
@@ -231,12 +231,12 @@ app.get("/api/population/:id", (req, res, next) => {
     if (!Number.isInteger(id)) {
     return next({ status: 404, message: "Please enter an population id" });
   }
-  const result = pool.query(`SELECT * FROM populations WHERE id = $1;`, [id], (err, data) => {
+  const result = pool.query('SELECT * FROM populations WHERE id = $1;', [id], (err, data) => {
     if (err) {
       return next({ status: 500, message: err});
     }
     else if (data.rowCount == 0) {
-      return next({ status: 404, message: `Please enter a valid population id` });
+      return next({ status: 404, message: 'Please enter a valid population id' });
     }
     else {
       res.send(data.rows[0]);
@@ -250,12 +250,12 @@ app.get("/api/climate/:id", (req, res, next) => {
     if (!Number.isInteger(id)) {
     return next({ status: 404, message: "Please enter an climate id" });
   }
-  const result = pool.query(`SELECT * FROM climates WHERE id = $1;`, [id], (err, data) => {
+  const result = pool.query('SELECT * FROM climates WHERE id = $1;', [id], (err, data) => {
     if (err) {
       return next({ status: 500, message: err});
     }
     else if (data.rowCount == 0) {
-      return next({ status: 404, message: `Please enter a valid climate id` });
+      return next({ status: 404, message: 'Please enter a valid climate id' });
     }
     else {
       res.send(data.rows[0]);
@@ -288,63 +288,63 @@ app.patch("/table1/:id", (req, res, next) => {
   const idDep = parseInt(req.params.idDep);
   const request = req.body;
 
-  const result1 = pool.query(`SELECT * FROM accounts WHERE id = $1;`, [idAcc], (readError, data) => {
+  const result1 = pool.query('SELECT * FROM accounts WHERE id = $1;', [idAcc], (readError, data) => {
     if (readError) {
       return next({ status: 500, message: readError});
     }
     else if (data.rowCount == 0) {
-      return next({status: 404, message: `Account ${idAcc} does not exist.`});
+      return next({status: 404, message: 'Account ${idAcc} does not exist.'});
     }
-    const result2 = pool.query(`SELECT * FROM deposits WHERE id = $1 AND account_id = $2;`, [idDep, idAcc], (readError, data) => {
+    const result2 = pool.query('SELECT * FROM deposits WHERE id = $1 AND account_id = $2;', [idDep, idAcc], (readError, data) => {
       if (readError) {
       return next({ status: 500, message: readError});
       }
       else if (data.rowCount == 0) {
-        return next({status: 404, message: `Deposit ${idDep} from Account ${idAcc} does not exist.`});
+        return next({status: 404, message: 'Deposit ${idDep} from Account ${idAcc} does not exist.'});
       }
     })
     // for loop allows for changing more than one value at a time
     for (let key in request){
       if (key == 'amount' && !Number(request[key])) {
-        return next({stutus: 400, message: `Submitted amount is not a number.`})
+        return next({stutus: 400, message: 'Submitted amount is not a number.'})
       }
       else if (key == 'amount') {
-        const result = pool.query(`UPDATE deposits SET amount=$1 WHERE id = $2;`, [request[key], idDep], (writeError, data)=> {
+        const result = pool.query('UPDATE deposits SET amount=$1 WHERE id = $2;', [request[key], idDep], (writeError, data)=> {
           if (writeError) {
             return next({status: 500, message: writeError});
           }
         });
       }
       else if (key == 'who') {
-        const result = pool.query(`UPDATE deposits SET who=$1 WHERE id = $2;`, [request[key], idDep], (writeError, data)=> {
+        const result = pool.query('UPDATE deposits SET who=$1 WHERE id = $2;', [request[key], idDep], (writeError, data)=> {
           if (writeError) {
             return next({status: 500, message: writeError});
           }
         });
       }
       else if (key == 'date') {
-        const result = pool.query(`UPDATE deposits SET date=$1 WHERE id = $2;`, [request[key], idDep], (writeError, data) => {
+        const result = pool.query('UPDATE deposits SET date=$1 WHERE id = $2;', [request[key], idDep], (writeError, data) => {
           if (writeError) {
             return next({status: 500, message: writeError});
           }
         });
       }
       else if (key == 'note') {
-        const result = pool.query(`UPDATE deposits SET note=$1 WHERE id = $2;`, [request[key], idDep], (writeError, data) => {
+        const result = pool.query('UPDATE deposits SET note=$1 WHERE id = $2;', [request[key], idDep], (writeError, data) => {
           if (writeError) {
             return next({status: 500, message: writeError});
           }
         });
       }
       else if (key == 'account_id') {
-        const result = pool.query(`SELECT * FROM accounts WHERE accounts_id = $1;`, [account_id], (readError, data) => {
+        const result = pool.query('SELECT * FROM accounts WHERE accounts_id = $1;', [account_id], (readError, data) => {
           if (readError) {
             return next({ status: 500, message: readError});
           }
           else if (data.rowCount == 0) {
-            return next({status: 404, message: `Account ${request[key]} to change to does not exist.`});
+            return next({status: 404, message: 'Account ${request[key]} to change to does not exist.'});
           }
-          const result = pool.query(`UPDATE deposits SET account_id=$1 WHERE id = $2;`, [request[key], idDep], (writeError, data) => {
+          const result = pool.query('UPDATE deposits SET account_id=$1 WHERE id = $2;', [request[key], idDep], (writeError, data) => {
             if (writeError) {
               return next({status: 500, message: writeError});
             }
@@ -352,12 +352,12 @@ app.patch("/table1/:id", (req, res, next) => {
         });
       }
       else {
-        return next({status: 400, message: `Request was bad. Can only change "amount", "who", "date", and/or "note"`})
+        return next({status: 400, message: 'Request was bad. Can only change "amount", "who", "date", and/or "note"'})
       }
     }
-    const result = pool.query(`SELECT * FROM deposits WHERE id = $1;`, [idDep], (readError, updatedData) => {
+    const result = pool.query('SELECT * FROM deposits WHERE id = $1;', [idDep], (readError, updatedData) => {
       updatedData = updatedData.rows[0];
-      res.send(`Updated: { id: ${updatedData.id}, account_id: ${updatedData.account_id}, amount: ${updatedData.amount}, who: ${updatedData.who}, date: ${updatedData.date}, note: ${updatedData.note} }`);
+      res.send('Updated: { id: ${updatedData.id}, account_id: ${updatedData.account_id}, amount: ${updatedData.amount}, who: ${updatedData.who}, date: ${updatedData.date}, note: ${updatedData.note} }');
     });
   });
 });
@@ -366,21 +366,21 @@ app.patch("/table1/:id", (req, res, next) => {
 app.delete("/table2/:id", (req, res, next) => {
   const id = parseInt(req.params.id);
   // Verify the ID exists
-  const result = pool.query(`SELECT * FROM deposits WHERE id = $1;`, [id], (readError, deletedData) => {
+  const result = pool.query('SELECT * FROM deposits WHERE id = $1;', [id], (readError, deletedData) => {
     if (readError) {
       return next({ status: 500, message: readError});
     }
     else if (deletedData.rowCount == 0) {
-      return next({status: 404, message: `Deposit ${id} does not exist.`});
+      return next({status: 404, message: 'Deposit ${id} does not exist.'});
     }
     // store the data that we are about to delete
     deletedData = deletedData.rows[0];
     //delete the data
-    const result = pool.query(`DELETE FROM deposits WHERE id = $1;`, [id], (writeError, data) => {
+    const result = pool.query('DELETE FROM deposits WHERE id = $1;', [id], (writeError, data) => {
       if (writeError) {
         return next({ status: 500, message: writeError });
       }
-      res.send(`Deleted: { id: ${deletedData.id}, amount: ${deletedData.amount}, who: ${deletedData.who}, date: ${deletedData.date}, note: ${deletedData.note} }`);
+      res.send('Deleted: { id: ${deletedData.id}, amount: ${deletedData.amount}, who: ${deletedData.who}, date: ${deletedData.date}, note: ${deletedData.note} }');
     });
   });
 });
@@ -397,6 +397,6 @@ app.use((err, req, res, next) => {
 
 // if requested handle does not exist -- keep last
 app.use((req, res, next) => {
-  // res.status(404).send(`Path Not Found: ${req.url}`);   // Only sends message or JSON, not both
-  res.status(404).json({ error: { message: `Path Not Found: ${req.url}` } });
+  // res.status(404).send('Path Not Found: ${req.url}');   // Only sends message or JSON, not both
+  res.status(404).json({ error: { message: 'Path Not Found: ${req.url}' } });
 });
