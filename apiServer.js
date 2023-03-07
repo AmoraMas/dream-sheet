@@ -291,7 +291,7 @@ app.post("/api/place", (req, res, next) => {
 
 
 // Changes/replaces information in row id of place
-app.patch("api/place/:id", (req, res, next) => {
+app.patch("/api/place/:id", (req, res, next) => {
   const id = parseInt(req.params.id);
   const request = req.body;
   let list = [name, location_id, lat_long, climate_id, population_id, type_id, thumbnail, link, cost, details];
@@ -308,6 +308,7 @@ app.patch("api/place/:id", (req, res, next) => {
       if (writeError) {
         return next({status: 500, message: writeError});
       }
+      res.send(`Added requested information.`);
     });
   }
 
@@ -390,24 +391,24 @@ app.patch("api/place/:id", (req, res, next) => {
 
 
 // Deletes an row of id from Table 1
-app.delete("/table2/:id", (req, res, next) => {
+app.delete("/api/place/:id", (req, res, next) => {
   const id = parseInt(req.params.id);
   // Verify the ID exists
-  const result = pool.query('SELECT * FROM deposits WHERE id = $1;', [id], (readError, deletedData) => {
+  const result = pool.query('SELECT * FROM places WHERE id = $1;', [id], (readError, deletedData) => {
     if (readError) {
       return next({ status: 500, message: readError});
     }
     else if (deletedData.rowCount == 0) {
-      return next({status: 404, message: 'Deposit ${id} does not exist.'});
+      return next({status: 404, message: `Place ${id} does not exist.`});
     }
     // store the data that we are about to delete
     deletedData = deletedData.rows[0];
     //delete the data
-    const result = pool.query('DELETE FROM deposits WHERE id = $1;', [id], (writeError, data) => {
+    const result = pool.query('DELETE FROM places WHERE id = $1;', [id], (writeError, data) => {
       if (writeError) {
         return next({ status: 500, message: writeError });
       }
-      res.send('Deleted: { id: ${deletedData.id}, amount: ${deletedData.amount}, who: ${deletedData.who}, date: ${deletedData.date}, note: ${deletedData.note} }');
+      res.send('Deleted place');
     });
   });
 });
@@ -425,5 +426,5 @@ app.use((err, req, res, next) => {
 // if requested handle does not exist -- keep last
 app.use((req, res, next) => {
   // res.status(404).send('Path Not Found: ${req.url}');   // Only sends message or JSON, not both
-  res.status(404).json({ error: { message: 'Path Not Found: ${req.url}' } });
+  res.status(404).json({ error: { message: `Path Not Found: ${req.url}` } });
 });
