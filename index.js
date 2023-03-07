@@ -98,7 +98,7 @@ $('.create-place').click(function () {
             $option = $('<option value="">').text('Select');
 
             // Populate drop down menus
-            $.get( route + 'api/' + questionName + 's' , (data) => {
+            $.get( route + 'api/' + questionName + 's', (data) => {
                 for (let i = 0; i < data.length; i++) {
                     // locations table has different data structure than the rest of these tables
                     if (questionName == 'location') {
@@ -138,16 +138,19 @@ $('.create-place').click(function () {
             "cost": $('#cost').val(),
             "details": $('#details').val(),
         }
-        console.log("Submiting Data:", data);
-        $.ajax({
-            type: "POST",
-            url: `${route}/api/place`,
-            data: `${placeData}`,
-            success: function (result) {
-                console.log(result);
-            },
-            dataType: "json"
+        console.log("Submiting Data:", placeData);
+        $.post( route + 'api/place', (placeData) => {
+            
         });
+        // $.ajax({
+        //     type: "POST",
+        //     url: `${route}api/place`,
+        //     data: `${placeData}`,
+        //     success: function (result) {
+        //         console.log(result);
+        //     },
+        //     dataType: "json"
+        // });
 
     });
 

@@ -278,10 +278,10 @@ app.get("/api/climate/:id", (req, res, next) => {
 // Adds new rows to places
 app.post("/api/place", (req, res, next) => {
   const { name, location_id, lat_long, climate_id, population_id, type_id, thumbnail, link, cost, details } = req.body;
-  if ( !name || !location_id || !lat_long || !climate_id || !population_id || !type_id || !thumbnail || !link || !cost || !details || !Number(location_id) || !Number(climate_id) || !Number(population_id) || !Number(type_id) ) {
+  if ( !name || !location_id || !lat_long || !climate_id || !population_id || !type_id || !thumbnail || !link || !cost || !details || !Number(location_id) || isNaN(climate_id) || isNaN(population_id) || isNaN(type_id) ) {
     return next({ status: 400, message: `Submitted information was incorrect.` });
   }
-  const result = pool.query(`INSERT INTO places (name, location_id, lat_long, climate_id, population_id, type_id, thumbnail, link, cost, details) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);`, [name, location_id, lat_long, climate_id, population_id, type_id, thumbnail, link, cost, details], (writeError, data) => {
+  const result = pool.query(`INSERT INTO places (name, location_id, lat_long, climate_id, population_id, type_id, thumbnail, link, cost, details) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);`, [name, Number(location_id), lat_long, Number(climate_id), Number(population_id), Number(type_id), thumbnail, link, cost, details], (writeError, data) => {
     if (writeError) {
       return next({ status: 500, message: writeError });
     }
@@ -303,7 +303,7 @@ app.patch("/api/place/:id", (req, res, next) => {
     }
     // Check if submitted body has good information
     const result = req.body;
-    let list = [name, location_id, lat_long, climate_id, population_id, type_id, thumbnail, link, cost, details];
+    let list = ['name', 'location_id', 'lat_long', 'climate_id', 'population_id', 'type_id', 'thumbnail', 'link', 'cost', 'details'];
     // Only has expected keys and expected integers are integers
     for (let key of request) {
       if (!list.includes(key)) {
