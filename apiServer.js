@@ -275,29 +275,43 @@ app.get("/api/climate/:id", (req, res, next) => {
 });
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Adds new rows to table 1
-app.post("/table1", (req, res, next) => {
-    // TODO: DO SOMETHING HERE
+// Adds new rows to places
+app.post("/api/place", (req, res, next) => {
+  const { name, location_id, lat_long, climate_id, population_id, type_id, thumbnail, link, cost, details } = req.body;
+  if ( !name || !location_id || !lat_long || !climate_id || !population_id || !type_id || !thumbnail || !link || !cost || !details || !Number(location_id) || !Number(climate_id) || !Number(population_id) || !Number(type_id) ) {
+    return next({ status: 400, message: `Submitted information was incorrect.` });
+  }
+  const result = pool.query(`INSERT INTO places (name, location_id, lat_long, climate_id, population_id, type_id, thumbnail, link, cost, details) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);`, [name, location_id, lat_long, climate_id, population_id, type_id, thumbnail, link, cost, details], (writeError, data) => {
+    if (writeError) {
+      return next({ status: 500, message: writeError });
+    }
+    res.send(`Added: { name: ${name}, location_id: ${location_id}, lat_long: ${lat_long}, climate_id: ${climate_id}, population_id: ${population_id}, type: ${type}, thumbnail: ${thumbnail}, link: ${link}, cost: ${cost}, details: ${details} }`);
+  });
 });
 
-// Changes/replaces information in row id of Table 1
-app.patch("/table1/:id", (req, res, next) => {
-  const idAcc = parseInt(req.params.idAcc);
-  const idDep = parseInt(req.params.idDep);
+
+// Changes/replaces information in row id of place
+app.patch("api/place/:id", (req, res, next) => {
+  const id = parseInt(req.params.id);
   const request = req.body;
+  let list = [name, location_id, lat_long, climate_id, population_id, type_id, thumbnail, link, cost, details];
+  for (let key of request) {
+    if (!list.includes(key)) {
+      return next({status: 400, message: 'Bad information provided. Key name. ' + key});
+    }
+    else if (key.endsWith('_id') && !Number(request[key])) {
+      return next({status: 400, message: 'Bad information provided. Key name. ' + key + ' Key Value. ' + request[key]});
+    }
+  }
+  for (let key in request) {
+    const result = pool.query('UPDATE places SET ' + key + '=$1 WHERE id = $2;', [request[key], id], (writeError, data)=> {
+      if (writeError) {
+        return next({status: 500, message: writeError});
+      }
+    });
+  }
+
+
 
   const result1 = pool.query('SELECT * FROM accounts WHERE id = $1;', [idAcc], (readError, data) => {
     if (readError) {
@@ -372,6 +386,8 @@ app.patch("/table1/:id", (req, res, next) => {
     });
   });
 });
+
+
 
 // Deletes an row of id from Table 1
 app.delete("/table2/:id", (req, res, next) => {
