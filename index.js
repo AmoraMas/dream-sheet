@@ -6,8 +6,8 @@ let accountEmail = null;
 let accountName = null;
 
 // Code to draw a single place card
-function drawPlaceCard (id, appendTo, otherNote) {
-    $.get(route + 'api/place/' + id, (data) => {
+function drawPlaceCard (placeid, appendTo, otherNote, dreamid) {
+    $.get(route + 'api/place/' + placeid, (data) => {
         let $card = $('<div>').addClass('card')
 
         let $location = $('<div>').addClass('location');
@@ -53,10 +53,11 @@ function drawPlaceCard (id, appendTo, otherNote) {
             $deleteDream.click( (data) => {
                 $.ajax({
                     type: "DELETE",
-                    url: `${route}api/dream/${id}`,
+                    url: `${route}api/dream/${dreamid}}`,
                     dataType: "json",
                     success: function (result) {
                         console.log(result);
+                        updateDreamList();
                     }
                 });
             });
@@ -66,7 +67,7 @@ function drawPlaceCard (id, appendTo, otherNote) {
             let $addDream = $('<button type="button">').addClass('addDream').text('Add Dream').hide(0);
             $addDream.click( (data) => {
                 let notes = prompt("Please provide some notes for this dream");
-                let submitData = { account_id: accountID, place_id: id, dream_notes: notes };
+                let submitData = { account_id: accountID, place_id: placeid, dream_notes: notes };
                 submitData = JSON.stringify(submitData);
                 $.ajax({
                     type: "POST",
@@ -76,6 +77,7 @@ function drawPlaceCard (id, appendTo, otherNote) {
                     dataType: "json",
                     success: function (result) {
                         console.log(result);
+                        updateDreamList();
                     }
                 });
             })
@@ -84,46 +86,62 @@ function drawPlaceCard (id, appendTo, otherNote) {
                 $deletePlace.click( (datra) => {
                 $.ajax({
                     type: "DELETE",
-                    url: `${route}api/place/${id}`,
+                    url: `${route}api/place/${placeid}`,
                     dataType: "json",
                     success: function (result) {
                         console.log(result);
+                        updatePlaceList();
                     }
                 });
-                });
-                $card.append($deletePlace);
+            });
+            $card.append($deletePlace);
         }
         $(appendTo).append($card);
     });
 }
 
+// Code to update the #dreams section of index.html
+function updateDreamList () {
+    $('#dreams').empty();
+    accountID = $('#account').val();
+    $.get(route + 'api/account/'+ accountID +'/dreams', (data) => {
+        $('#dreams').empty();
+        console.log('Pulling dreams for account', accountID);
+        for (let i = 0; i < data.length; i++) {
+            drawPlaceCard(data[i].place_id, '#dreams', data[i].dream_notes, data[i].id);
+        }
+        $.get(route + 'api/account/' + accountID, (data) => {
+            AccountLocation = data.location_id;
+            isAdmin = data.is_admin;
+            accountEmail = data.email;
+            accountName = data.name;
+            if (isAdmin) {
+                $('.deletePlace').show(500);
+            }
+            else {
+                $('.deletePlace').hide(500);
+            }
+            $('.addDream').show(500);
+        })
+    });
+}
+
+// code to find all places and draw them
+function updatePlaceList() {
+    $('#places').empty();
+    $.get( route + 'api/places', (data) => { 
+        for (let i = 0; i < data.length; i++) {
+            drawPlaceCard(data[i].id, '#places');
+        }
+    });
+}
 
 // Code to populate Account ID list
 $.get( route + 'api/accounts', (data) => { 
     $accountList = $(`<select name="account" id="account">`);
     // ON CHANGE populate user dreams section
     $accountList.change(function () {
-        accountID = $('#account').val();
-        $.get(route + 'api/account/'+ $('#account').val() +'/dreams', (data) => {
-            $('#dreams').empty();
-            console.log('Pulling dreams for account', accountID);
-            for (let i = 0; i < data.length; i++) {
-                drawPlaceCard(data[i].place_id, '#dreams', data[i].dream_notes);
-            }
-            $.get(route + 'api/account/' + accountID, (data) => {
-                AccountLocation = data.location_id;
-                isAdmin = data.is_admin;
-                accountEmail = data.email;
-                accountName = data.name;
-                if (isAdmin) {
-                    $('.deletePlace').show(500);
-                }
-                else {
-                    $('.deletePlace').hide(500);
-                }
-                $('.addDream').show(500);
-            })
-        });
+        updateDreamList();
     });
     let $option = $(`<option value="0"></option>`).text('Select');
         $accountList.append($option);
@@ -132,13 +150,6 @@ $.get( route + 'api/accounts', (data) => {
         $accountList.append($option);
     }
     $('#accountID').append($accountList);
-});
-
-// code to find all places and draw them
-$.get( route + 'api/places', (data) => { 
-    for (let i = 0; i < data.length; i++) {
-        drawPlaceCard(data[i].id, '#places');
-    }
 });
 
 $('.create-place').click(function () {
@@ -212,3 +223,5 @@ $('.create-place').click(function () {
     $($createPlaceForm).append($buttonPost);
     $('#create-place').append($createPlaceForm);
 });
+
+updatePlaceList();

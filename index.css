@@ -4,6 +4,7 @@ body {
 
 hr {
     width: 90%;
+    height: 1px;
 }
 
 .everything {
@@ -15,8 +16,7 @@ hr {
 
 #dreams,
 #places,
-.card,
-.create-place-form {
+.card {
     border-radius: 20px;
     position: relative;
     flex-wrap: wrap;
@@ -35,17 +35,25 @@ hr {
     background: rgba(255, 255, 255, 0.6);
     box-shadow: 4px 8px 8px 1px rgba(0, 0, 0, 0.5);
     color: black;
-    width: 300px;
     padding: 10px;
     margin: 10px;
+    width: 300px;
 }
 
 .create-place-form {
-    width: 350px;
+    border-radius: 20px;
+    position: relative;
+    margin-right: auto;
+    margin-left: auto;
+    width: 400px;
 }
 
 .thumbnail {
     height: 75px;
     width: 75px;
     margin: 5px;
+}
+
+.question {
+    margin: 2px;
 }
